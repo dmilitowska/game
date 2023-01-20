@@ -1,15 +1,15 @@
 const prompt = require("prompt-sync")();
 
 let field = {
-    1: ' ',
-    2: ' ',
-    3: ' ',
-    4: ' ',
-    5: ' ',
-    6: ' ',
-    7: ' ',
-    8: ' ',
-    9: ' '
+    1: "",
+    2: "",
+    3: "",
+    4: "",
+    5: "",
+    6: "",
+    7: "",
+    8: "",
+    9: ""
   };
 function boardOut() {
     console.log('\n' +
@@ -19,11 +19,35 @@ function boardOut() {
       ' ---------\n' +
       ' ' + field[7] + ' | ' + field[8] + ' | ' + field[9] + '\n');
   }
-
+  const winningOptions = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7],
+  ]
+  function winner(player) {
+    let count
+    for (let i = 0; i < winningOptions.length; i++) {
+      count = 0;
+      for (let j = 0; j < winningOptions[i].length; j++) {
+        if (field[winningOptions[i][j]] === player) {
+          count++;
+        }
+        if (count === 3) {
+          return true
+        }
+      }
+    }
+    return false
+  }
  
 
   function checkIfEmpty(player) {
-    if (field[player] === ' ') {
+    if (field[player] === "") {
       return true
     } else {
       return false
@@ -32,13 +56,12 @@ function boardOut() {
 
   function fieldChange(player, letter) {
     field[player] = letter;
-        
-  }
+      }
 
   
 
  function computerChoice(){
-    let available = (Object.keys(field).filter((k) => field[k] == ' '))
+    let available = (Object.keys(field).filter((k) => field[k] == ""))
     const int = available.map(a => parseInt(a))
     let random = Math.floor((Math.random())* int.length)
     let computer = int[random]
@@ -50,6 +73,8 @@ function boardOut() {
 computerChoice()
 }
  }
+
+
 function choice(){
    
     let user = parseInt(prompt("Enter your choice of field: "));
@@ -59,24 +84,29 @@ function choice(){
          fieldChange(user, letter)
          boardOut();
         } else {
-        user = parseInt(prompt( 'Select available field:'))
+        user = parseInt(prompt( "Select available field:"))
         choice(user)
         }
   } else {
-    user = parseInt(prompt( 'Enter a number 1-9'))
+    user = parseInt(prompt( "Enter a number 1-9"))
     choice(user)
   }
 }
-function gameOn(){ 
-    for (let i=1; i=9; i++){
+
+
+function game(){ 
+    
     choice()
+    if (winner("X")) {console.log("You win!")}
+    else{
     computerChoice()
+    if (winner("O")){console.log("Computer wins!")} else {game()}}
   }
   
-  choice()
- }
+  
+ 
 
   boardOut()
- gameOn()
+ game()
 // choice()
 
